@@ -10,23 +10,23 @@
 #include "common.h"
 #include "parse.h"
 
-int output_file(int fd, struct dbheader_t *dbhdr) {
-	if (fd < 0) {
+void output_file(int fd, struct dbheader_t *dbhdr) {
+  if (fd < 0) {
 		printf("Got a bad FD from the user\n");
-		return STATUS_ERROR;
+		// return STATUS_ERROR;
 	}
 
 	dbhdr->magic = htonl(dbhdr->magic);
-	dbhdr->filesize = htonl(dbhdr->filesize);
-	dbhdr->count = htons(dbhdr->filesize);
+  dbhdr->filesize = htonl(dbhdr->filesize);
+	dbhdr->count = htons(dbhdr->count);
 	dbhdr->version = htons(dbhdr->version);
 
-	lseek(fd, 0, SEEK_SET);
+  lseek(fd, 0, SEEK_SET);
 
-	write(fd, dbhdr, sizeof(struct dbheader_t));
+  write(fd, dbhdr, sizeof(struct dbheader_t));
 
-  return STATUS_SUCCESS;
-}	
+  return;
+}
 
 int validate_db_header(int fd, struct dbheader_t **headerOut) {
   if (fd < 0) {
@@ -35,7 +35,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	}
 
   struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
-	if (header == NULL) {
+	if (header == -1) {
 		printf("Malloc failed create a db header\n");
 		return STATUS_ERROR;
 	}
@@ -51,34 +51,34 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	header->magic = ntohl(header->magic);
 	header->filesize = ntohl(header->filesize);
 
-	if (header->magic != HEADER_MAGIC) {
+  if (header->magic != HEADER_MAGIC) {
 		printf("Impromper header magic\n");
 		free(header);
 		return -1;
 	}
 
-	if (header->version != 1) {
+  if (header->version != 1) {
 		printf("Impromper header version\n");
 		free(header);
 		return -1;
 	}
 
 	struct stat dbstat = {0};
-	fstat(fd, &dbstat);
+
+  fstat(fd, &dbstat);
 	if (header->filesize != dbstat.st_size) {
 		printf("Corrupted database\n");
 		free(header);
 		return -1;
 	}
 
-	*headerOut = header;
-
-  return 0;
+  *headerOut = header;
 }
 
-int create_db_header(struct dbheader_t **headerOut) {
+int create_db_header(int fd, struct dbheader_t **headerOut) {
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
-  if (header == NULL) {
+
+  if (header == -1) {
     printf("Malloc failed to create db header\n");
     return STATUS_ERROR;
   }
@@ -92,4 +92,3 @@ int create_db_header(struct dbheader_t **headerOut) {
 
   return STATUS_SUCCESS;
 }
-

@@ -49,18 +49,18 @@ int main(int argc, char *argv[]) {
     dbfd = create_db_file(filepath);
     if (dbfd == STATUS_ERROR) {
       printf("Unable to create database file\n");
-      return STATUS_ERROR;
+      return -1;
     }
 
-    if (create_db_header(&dbhdr) == STATUS_ERROR) {
+    if (create_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
       printf("Failed to create database header\n");
-      return STATUS_ERROR;
+      return -1;
     }
   } else {
     dbfd = open_db_file(filepath);
     if (dbfd == STATUS_ERROR) {
       printf("Unable to open database file\n");
-      return STATUS_ERROR;
+      return -1;
     }
 
     if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
