@@ -31,8 +31,10 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	printf("%s %s %s\n", name, addr, hours);
 
-	strncpy(employees[dbhdr->count-1].name, name, sizeof(employees[dbhdr->count-1].name));
-	strncpy(employees[dbhdr->count-1].address, addr, sizeof(employees[dbhdr->count-1].address));
+	strncpy(employees[dbhdr->count - 1].name, name, sizeof(employees[dbhdr->count - 1].name) -1);
+	employees[dbhdr->count - 1].name[sizeof(employees[dbhdr->count - 1].name) - 1] = '\0'; // Null-terminate
+	strncpy(employees[dbhdr->count - 1].address, addr, sizeof(employees[dbhdr->count-1].address) -1);
+	employees[dbhdr->count - 1].address[sizeof(employees[dbhdr->count - 1].address) - 1] = '\0'; // Null-terminate
 
 	employees[dbhdr->count-1].hours = atoi(hours);
 
@@ -117,13 +119,13 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
   if (header->magic != HEADER_MAGIC) {
 		printf("Impromper header magic\n");
 		free(header);
-		return -1;
+		return STATUS_ERROR;
 	}
 
   if (header->version != 1) {
 		printf("Impromper header version\n");
 		free(header);
-		return -1;
+		return STATUS_ERROR;
 	}
 
 	struct stat dbstat = {0};
@@ -132,7 +134,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	if (header->filesize != dbstat.st_size) {
 		printf("Corrupted database\n");
 		free(header);
-		return -1;
+		return STATUS_ERROR;
 	}
 
   *headerOut = header;
