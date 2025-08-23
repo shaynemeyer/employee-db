@@ -22,7 +22,7 @@ void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
 
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring){
 	if (dbhdr == NULL || employees == NULL || addstring == NULL) {
-		fprintf(stderr, "Error: Invalid input parameters.\n");
+		printf("Error: Invalid input parameters.\n");
 		return STATUS_ERROR; // Handle NULL pointers
 	}
 
@@ -33,14 +33,14 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	// Check if all tokens are present
 	if (name == NULL || addr == NULL || hours == NULL) {
-			fprintf(stderr, "Error: Missing fields in input string.\n");
+			printf("Error: Missing fields in input string.\n");
 			return STATUS_ERROR; // Handle missing fields
 	}
 	printf("%s %s %s\n", name, addr, hours);
 
 	// Ensure we do not exceed the bounds of the employees array
 	if (dbhdr->count <= 0 || dbhdr->count > MAX_EMPLOYEES) {
-			fprintf(stderr, "Error: Invalid employee count.\n");
+			printf("Error: Invalid employee count.\n");
 			return STATUS_ERROR; // Handle invalid count
 	}
 
