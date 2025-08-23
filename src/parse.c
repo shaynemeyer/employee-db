@@ -74,7 +74,11 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 	}
 
 	// read into memory
-	read(fd, employees, count*sizeof(struct employee_t));
+	if (read(fd, employees, count*sizeof(struct employee_t) != sizeof(struct dbheader_t))) {
+		perror("read");
+		free(employees);
+		return STATUS_ERROR;
+	}
 
 	int i = 0;
 	for (; i<count; i++) {
