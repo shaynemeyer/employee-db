@@ -127,6 +127,11 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 		return STATUS_ERROR;
 	}
 
+	if (headerOut == NULL) {
+		printf("Database header is null\n");
+    return STATUS_ERROR;
+	}
+
   struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 	if (header == NULL) {
 		printf("Malloc failed create a db header\n");
