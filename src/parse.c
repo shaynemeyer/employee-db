@@ -39,7 +39,7 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	printf("%s %s %s\n", name, addr, hours);
 
 	// Ensure we do not exceed the bounds of the employees array
-	if (dbhdr->count <= 0 || dbhdr->count > MAX_EMPLOYEES) {
+	if (dbhdr->count < 0 || dbhdr->count > MAX_EMPLOYEES) {
 			printf("Error: Invalid employee count.\n");
 			return STATUS_ERROR; // Handle invalid count
 	}
