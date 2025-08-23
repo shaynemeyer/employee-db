@@ -65,6 +65,11 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 		return STATUS_ERROR; // Handle NULL pointers
 	}
 
+	if (dbhdr->count < 0) {
+		printf("Error: Invalid employee count (%d).\n", dbhdr->count);
+		return STATUS_ERROR; // Handle the error appropriately
+  }
+
 	int count = dbhdr->count;
 
 	struct employee_t *employees = calloc(count, sizeof(struct employee_t));
