@@ -38,12 +38,6 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	}
 	printf("%s %s %s\n", name, addr, hours);
 
-	// // Ensure we do not exceed the bounds of the employees array
-	// if (dbhdr->count <= 0 || dbhdr->count > MAX_EMPLOYEES) {
-	// 		printf("Error: Invalid employee count.\n");
-	// 		return STATUS_ERROR; // Handle invalid count
-	// }
-
 	strncpy(employees[dbhdr->count - 1].name, name, sizeof(employees[dbhdr->count - 1].name) -1);
 	employees[dbhdr->count - 1].name[sizeof(employees[dbhdr->count - 1].name) - 1] = '\0'; // Null-terminate
 	strncpy(employees[dbhdr->count - 1].address, addr, sizeof(employees[dbhdr->count-1].address) -1);
@@ -104,6 +98,11 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
   if (fd < 0) {
 		printf("Got a bad FD from the user\n");
 		return STATUS_ERROR;
+	}
+
+	if (employees == NULL) {
+		printf("employees is null\n");
+    return STATUS_ERROR;
 	}
 
 	int realcount = dbhdr->count;
