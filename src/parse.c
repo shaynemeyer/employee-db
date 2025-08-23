@@ -60,6 +60,11 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 		return STATUS_ERROR;
 	}
 
+	if (employeesOut == NULL) {
+		printf("employeesOut is null\n");
+    return STATUS_ERROR;
+	}
+
 	if (dbhdr == NULL || employeesOut == NULL) {
 		printf("Error: Invalid input parameters.\n");
 		return STATUS_ERROR; // Handle NULL pointers
