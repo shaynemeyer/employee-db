@@ -130,12 +130,8 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	return 0;
 }
 
-int create_db_header(int fd, struct dbheader_t **headerOut) {
-	if (fd < 0) {
-		printf("Got a bad FD from the user\n");
-		return STATUS_ERROR;
-	}
-	
+int create_db_header(struct dbheader_t **headerOut) {
+
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 
   if (header == (void*)-1) {
