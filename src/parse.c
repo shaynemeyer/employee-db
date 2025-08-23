@@ -39,7 +39,7 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	printf("%s %s %s\n", name, addr, hours);
 
 	// Ensure we do not exceed the bounds of the employees array
-	if (dbhdr->count < 0 || dbhdr->count > MAX_EMPLOYEES) {
+	if (dbhdr->count <= 0 || dbhdr->count > MAX_EMPLOYEES) {
 			printf("Error: Invalid employee count.\n");
 			return STATUS_ERROR; // Handle invalid count
 	}
@@ -80,12 +80,13 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 		return STATUS_ERROR;
 	}
 
-	int i = 0;
-	for (; i<count; i++) {
+
+	for (int i = 0; i<count; i++) {
 		employees[i].hours = ntohl(employees[i].hours);
 	}
 
 	*employeesOut = employees;
+
 	return STATUS_SUCCESS;
 }
 
