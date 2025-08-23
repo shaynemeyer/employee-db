@@ -94,9 +94,17 @@ int main(int argc, char *argv[]) {
   }
 
   if (list) {
+    if (dbhdr == NULL || employees == NULL) {
+      printf("Error");
+      return STATUS_ERROR;
+    }
     list_employees(dbhdr, employees);
   }
 
+  if (dbhdr == NULL || employees == NULL) {
+      printf("Error");
+      return STATUS_ERROR;
+  }
   output_file(dbfd, dbhdr, employees);
   
   return 0;
