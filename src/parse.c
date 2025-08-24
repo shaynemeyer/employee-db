@@ -13,7 +13,6 @@
 int create_db_header(struct dbheader_t **headerOut) {
 	if (headerOut == NULL) {
 		printf("ERROR: Invalid arguments supplied.\n");
-		free(headerOut);
 		return STATUS_ERROR;
 	}
 
@@ -48,6 +47,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 	if (header == (void*)-1) {
 		printf("Malloc failed create a db header\n");
+		free(header);
 		return STATUS_ERROR;
 	}
 
@@ -65,14 +65,14 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	if (header->magic != HEADER_MAGIC) {
 		printf("Impromper header magic\n");
 		free(header);
-		return -1;
+		return STATUS_ERROR;
 	}
 
 
 	if (header->version != 1) {
 		printf("Impromper header version\n");
 		free(header);
-		return -1;
+		return STATUS_ERROR;
 	}
 
 	struct stat dbstat = {0};
@@ -80,7 +80,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	if (header->filesize != dbstat.st_size) {
 		printf("Corrupted database\n");
 		free(header);
-		return -1;
+		return STATUS_ERROR;
 	}
 
 	*headerOut = header;
@@ -127,6 +127,7 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 	struct employee_t *employees = calloc(count, sizeof(struct employee_t));
 	if (employees == (void*)-1) {
 		printf("Malloc failed\n");
+		free(employees);
 		return STATUS_ERROR;
 	}
 
@@ -145,9 +146,6 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring) {
 	if (dbhdr == NULL || employees == NULL || addstring == NULL) {
 		printf("ERROR: Invalid arguments supplied.\n");
-		free(dbhdr);
-		free(employees);
-		free(addstring);
 		return STATUS_ERROR;
 	}
 	

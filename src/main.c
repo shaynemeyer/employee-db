@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   struct dbheader_t *dbhdr = NULL;
   struct employee_t *employees = NULL;
 
-  while ((c = getopt(argc, argv, "nf:")) != -1) {
+  while ((c = getopt(argc, argv, "nf:a:")) != -1) {
     switch (c){
     case 'n':
       newfile = true;
@@ -33,9 +33,9 @@ int main(int argc, char *argv[]) {
     case 'f':
       filepath = optarg;
       break;
-    // case 'a':
-    //   addstring = optarg;
-    //   break;
+    case 'a':
+      addstring = optarg;
+      break;
     // case 'l':
     //   list = true;
     //   break;
@@ -83,11 +83,17 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  // if (addstring) {
-  //   dbhdr->count++;
-  //   employees = realloc(employees, dbhdr->count*(sizeof(struct employee_t)));
-  //   add_employee(dbhdr, employees, addstring);
-  // }
+  if (addstring) {
+    dbhdr->count++;
+    employees = realloc(employees, dbhdr->count*(sizeof(struct employee_t)));
+    if (employees == NULL) {
+      printf("ERROR: Creating employee failed.\n");
+      free(employees);
+      return STATUS_ERROR;
+    }
+    
+    add_employee(dbhdr, employees, addstring);
+  }
 
   // if (list) {
   //   list_employees(dbhdr, employees);
