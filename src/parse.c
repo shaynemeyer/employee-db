@@ -145,9 +145,6 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring) {
 	if (dbhdr == NULL || employees == NULL || addstring == NULL || addstring[0] == '\0') {
 		printf("ERROR: Invalid arguments supplied.\n");
-		free(dbhdr);
-		free(employees);
-		free(addstring);
 		return STATUS_ERROR;
 	}
 
@@ -159,14 +156,16 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	// Check if all tokens are present
 	if (name == NULL || addr == NULL || hours == NULL) {
 			printf("Error: Missing fields in input string.\n");
-			free(name);
-			free(addr);
-			free(hours);
 			return STATUS_ERROR; // Handle missing fields
 	}
 	printf("%s %s %s\n", name, addr, hours);
 
 	printf("Count: %d\n", dbhdr->count);
+
+	if (dbhdr->count >= MAX_EMPLOYEES) { // Assuming MAX_EMPLOYEES is defined
+		printf("Error: Employee list is full.\n");
+		return STATUS_ERROR; // Prevent out-of-bounds access
+	}
 
 	int cursor_position = dbhdr->count -1;
 
