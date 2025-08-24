@@ -112,7 +112,7 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 
 int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) {
   if (fd < 0) {
-		printf("ERROR: Invalid file descriptor.\n");
+		printf("Got a bad FD from the user\n");
 		return STATUS_ERROR;
 	}
 
@@ -131,8 +131,9 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
   lseek(fd, 0, SEEK_SET);
 
   write(fd, dbhdr, sizeof(struct dbheader_t));
-	
-	for (int i = 0; i < realcount; i++) {
+
+	int i = 0;
+	for (; i < realcount; i++) {
 		employees[i].hours = htonl(employees[i].hours);
 		write(fd, &employees[i], sizeof(struct employee_t));
 	}
