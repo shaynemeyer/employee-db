@@ -116,7 +116,7 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
 		return STATUS_ERROR;
 	}
 
-	if (dbhdr == NULL || employees == NULL) {
+	if (employees == NULL) {
 		printf("ERROR: Missing required parameters.\n");
     return STATUS_ERROR;
 	}
