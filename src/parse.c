@@ -17,7 +17,10 @@ int create_db_header(int fd, struct dbheader_t **headerOut) {
 		return STATUS_ERROR;
 	}
 
-	printf("FD: %d\n");
+	if (fd < 0) {
+		printf("Got a bad FD from the user\n");
+		return STATUS_ERROR;
+	}
 
 	header->version = 0x1;
 	header->count = 0;
