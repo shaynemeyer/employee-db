@@ -163,16 +163,16 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	printf("Count: %d\n", dbhdr->count);
 
-	int cur = dbhdr->count -1;
+	int cursor_position = dbhdr->count -1;
 
-	strncpy(employees[cur].name, name, sizeof(employees[cur].name));
-	strncpy(employees[cur].address, addr, sizeof(employees[cur].address));
+	strncpy(employees[cursor_position].name, name, sizeof(employees[cursor_position].name));
+	strncpy(employees[cursor_position].address, addr, sizeof(employees[cursor_position].address));
 
-	employees[cur].name[sizeof(employees[cur].name) - 1] = '\0';
-	employees[cur].address[sizeof(employees[cur].address) - 1] = '\0';
+	employees[cursor_position].name[sizeof(employees[cursor_position].name) - 1] = '\0';
+	employees[cursor_position].address[sizeof(employees[cursor_position].address) - 1] = '\0';
 
 
-	employees[cur].hours = atoi(hours);
+	employees[cursor_position].hours = atoi(hours);
 
 	dbhdr->count++;
 	
