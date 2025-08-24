@@ -159,6 +159,9 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	// Check if all tokens are present
 	if (name == NULL || addr == NULL || hours == NULL) {
 			printf("Error: Missing fields in input string.\n");
+			free(name);
+			free(addr);
+			free(hours);
 			return STATUS_ERROR; // Handle missing fields
 	}
 	printf("%s %s %s\n", name, addr, hours);
