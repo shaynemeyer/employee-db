@@ -20,6 +20,7 @@ int create_db_header(struct dbheader_t **headerOut) {
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 	if (header == (void*)-1) {
 		printf("Malloc failed to create db header\n");
+		free(header);
 		return STATUS_ERROR;
 	}
 
