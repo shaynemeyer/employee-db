@@ -13,6 +13,7 @@
 int create_db_header(struct dbheader_t **headerOut) {
 	if (headerOut == NULL) {
 		printf("ERROR: Invalid arguments supplied.\n");
+		free(headerOut);
 		return STATUS_ERROR;
 	}
 
