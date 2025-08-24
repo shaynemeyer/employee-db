@@ -117,12 +117,12 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 
 int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) {
   if (fd < 0) {
-		printf("Got a bad FD from the user\n");
+		printf("ERROR: Invalid file descriptor.\n");
 		return STATUS_ERROR;
 	}
 
-	if (employees == NULL) {
-		printf("employees is null\n");
+	if (dbhdr == NULL || employees == NULL) {
+		printf("ERROR: Missing required parameters.\n");
     return STATUS_ERROR;
 	}
 
@@ -135,12 +135,17 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
 
   lseek(fd, 0, SEEK_SET);
 
-  write(fd, dbhdr, sizeof(struct dbheader_t));
-
-	int i = 0;
-	for (; i < realcount; i++) {
+  if (write(fd, dbhdr, sizeof(struct dbheader_t)) < 0) {
+		perror("Failed to write header");
+		return STATUS_ERROR;
+	}
+	
+	for (int i = 0; i < realcount; i++) {
 		employees[i].hours = htonl(employees[i].hours);
-		write(fd, &employees[i], sizeof(struct employee_t));
+		if (write(fd, &employees[i], sizeof(struct employee_t)) < 0) {
+			perror("Failed to write employee record.");
+			return STATUS_ERROR;
+		}
 	}
 
   return STATUS_SUCCESS;
