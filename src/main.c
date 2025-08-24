@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   struct dbheader_t *dbhdr = NULL;
   struct employee_t *employees = NULL;
 
-  while ((c = getopt(argc, argv, "nf:a:l")) != -1) {
+  while ((c = getopt(argc, argv, "nf:")) != -1) {
     switch (c){
     case 'n':
       newfile = true;
@@ -33,15 +33,15 @@ int main(int argc, char *argv[]) {
     case 'f':
       filepath = optarg;
       break;
-    case 'a':
-      addstring = optarg;
-      break;
-    case 'l':
-      list = true;
-      break;
-    case '?':
-      printf("Unknown option -%c\n", c);
-      break;
+    // case 'a':
+    //   addstring = optarg;
+    //   break;
+    // case 'l':
+    //   list = true;
+    //   break;
+    // case '?':
+    //   printf("Unknown option -%c\n", c);
+    //   break;
     default:
       return -1;
     }
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
       return -1;
     }
 
-    if (create_db_header(&dbhdr) == STATUS_ERROR) {
+    if (create_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
       printf("Failed to create database header\n");
       return -1;
     }
@@ -83,15 +83,15 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  if (addstring) {
-    dbhdr->count++;
-    employees = realloc(employees, dbhdr->count*(sizeof(struct employee_t)));
-    add_employee(dbhdr, employees, addstring);
-  }
+  // if (addstring) {
+  //   dbhdr->count++;
+  //   employees = realloc(employees, dbhdr->count*(sizeof(struct employee_t)));
+  //   add_employee(dbhdr, employees, addstring);
+  // }
 
-  if (list) {
-    list_employees(dbhdr, employees);
-  }
+  // if (list) {
+  //   list_employees(dbhdr, employees);
+  // }
 
   output_file(dbfd, dbhdr, employees);
   
