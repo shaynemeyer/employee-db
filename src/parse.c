@@ -11,12 +11,16 @@
 #include "parse.h"
 
 int create_db_header(struct dbheader_t **headerOut) {
+	if (headerOut == NULL) {
+		printf("ERROR: Invalid arguments supplied.\n");
+		return STATUS_ERROR;
+	}
+
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 	if (header == (void*)-1) {
 		printf("Malloc failed to create db header\n");
 		return STATUS_ERROR;
 	}
-
 
 	header->version = 0x1;
 	header->count = 0;
@@ -31,6 +35,11 @@ int create_db_header(struct dbheader_t **headerOut) {
 int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	if (fd < 0) {
 		printf("Got a bad FD from the user\n");
+		return STATUS_ERROR;
+	}
+
+	if (headerOut == NULL) {
+		printf("ERROR: Invalid arguments supplied.\n");
 		return STATUS_ERROR;
 	}
 
@@ -73,6 +82,8 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	}
 
 	*headerOut = header;
+
+	return STATUS_SUCCESS;
 }
 
 int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) {
