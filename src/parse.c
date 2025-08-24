@@ -12,20 +12,23 @@
 
 void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
 	if (dbhdr == NULL || employees == NULL) {
-		printf("ERROR: Required parameters not supplied.");
+		printf("ERROR: Required parameters not supplied.\n");
 		return;
 	}
 	
 	if (dbhdr->count <= 0) {
-		printf("SORRY: No employees to list");
+		printf("SORRY: No employees to list\n");
 		return;
 	}
-	int i = 0;
-	for(;i < dbhdr->count; i++) {
+
+	printf("Listing Employees:\n");
+	
+	for(int i = 0; i < dbhdr->count; i++) {
 		printf("Employee %d\n", i);
 		printf("\tName: %s\n", employees[i].name);
 		printf("\tAddress: %s\n", employees[i].address);
 		printf("\nHours: %d\n", employees[i].hours);
+		printf("\n");
 	}
 }
 
@@ -33,6 +36,12 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	if (dbhdr == NULL || employees == NULL || addstring == NULL) {
 		printf("Error: Invalid input parameters.\n");
 		return STATUS_ERROR; // Handle NULL pointers
+	}
+
+	// Check if there is space for a new employee
+	if (dbhdr->count >= MAX_EMPLOYEES) {
+			printf("Error: Employee database is full.\n");
+			return STATUS_ERROR; // Handle full database
 	}
 
 	// Tokenize the input string
@@ -49,13 +58,19 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	printf("Count: %d\n", dbhdr->count);
 
-	strncpy(employees[dbhdr->count - 1].name, name, sizeof(employees[dbhdr->count - 1].name) -1);
-	employees[dbhdr->count - 1].name[sizeof(employees[dbhdr->count - 1].name) - 1] = '\0'; // Null-terminate
-	strncpy(employees[dbhdr->count - 1].address, addr, sizeof(employees[dbhdr->count-1].address) -1);
-	employees[dbhdr->count - 1].address[sizeof(employees[dbhdr->count - 1].address) - 1] = '\0'; // Null-terminate
+  // Safely copy name and address
+	snprintf(employees[dbhdr->count].name, sizeof(employees[dbhdr->count].name), "%s", name);
+	snprintf(employees[dbhdr->count].address, sizeof(employees[dbhdr->count].address), "%s", addr);
 
-	employees[dbhdr->count-1].hours = atoi(hours);
+	// Convert hours with error checking
+	char *endptr;
+	employees[dbhdr->count].hours = strtol(hours, &endptr, 10);
+	if (*endptr != '\0') {
+			printf("Error: Invalid hours format.\n");
+			return STATUS_ERROR; // Handle invalid hours
+	}
 
+  dbhdr->count++; // Increment the count after adding the employee
 	return STATUS_SUCCESS;
 }
 
