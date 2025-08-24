@@ -17,6 +17,8 @@ int create_db_header(int fd, struct dbheader_t **headerOut) {
 		return STATUS_ERROR;
 	}
 
+	printf("FD: %d\n");
+
 	header->version = 0x1;
 	header->count = 0;
 	header->magic = HEADER_MAGIC;
