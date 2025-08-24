@@ -85,11 +85,6 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 		return STATUS_ERROR; // Handle NULL pointers
 	}
 
-	// if (dbhdr->count <= 0) {
-	// 	printf("Error: Invalid employee count (%d).\n", dbhdr->count);
-	// 	return STATUS_ERROR; // Handle the error appropriately
-  // }
-
 	int count = dbhdr->count;
 
 	struct employee_t *employees = calloc(count, sizeof(struct employee_t));
@@ -135,17 +130,11 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
 
   lseek(fd, 0, SEEK_SET);
 
-  if (write(fd, dbhdr, sizeof(struct dbheader_t)) < 0) {
-		perror("Failed to write header");
-		return STATUS_ERROR;
-	}
+  write(fd, dbhdr, sizeof(struct dbheader_t));
 	
 	for (int i = 0; i < realcount; i++) {
 		employees[i].hours = htonl(employees[i].hours);
-		if (write(fd, &employees[i], sizeof(struct employee_t)) < 0) {
-			perror("Failed to write employee record.");
-			return STATUS_ERROR;
-		}
+		write(fd, &employees[i], sizeof(struct employee_t));
 	}
 
   return STATUS_SUCCESS;
@@ -158,7 +147,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	}
 
 	if (headerOut == NULL) {
-		printf("Database header is null\n");
+		printf("ERROR: Database header is null\n");
     return STATUS_ERROR;
 	}
 
