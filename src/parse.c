@@ -148,6 +148,28 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 		printf("ERROR: Invalid arguments supplied.\n");
 		return STATUS_ERROR;
 	}
+
+	// Tokenize the input string
+	char *name = strtok(addstring, ",");
+	char *addr = strtok(NULL, ",");
+	char *hours = strtok(NULL, ",");
+
+	// Check if all tokens are present
+	if (name == NULL || addr == NULL || hours == NULL) {
+			printf("Error: Missing fields in input string.\n");
+			return STATUS_ERROR; // Handle missing fields
+	}
+	printf("%s %s %s\n", name, addr, hours);
+
+	printf("Count: %d\n", dbhdr->count);
+
+	// Safely copy name and address
+	snprintf(employees[dbhdr->count].name, sizeof(employees[dbhdr->count].name), "%s", name);
+	snprintf(employees[dbhdr->count].address, sizeof(employees[dbhdr->count].address), "%s", addr);
+
+	employees[dbhdr->count-1].hours = atoi(hours);
+
+	dbhdr->count++;
 	
 	return STATUS_SUCCESS;
 }
