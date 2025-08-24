@@ -163,10 +163,9 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	printf("Count: %d\n", dbhdr->count);
 
-	// Safely copy name and address
-	snprintf(employees[dbhdr->count].name, sizeof(employees[dbhdr->count].name), "%s", name);
-	snprintf(employees[dbhdr->count].address, sizeof(employees[dbhdr->count].address), "%s", addr);
-
+	strncpy(employees[dbhdr->count-1].name, name, sizeof(employees[dbhdr->count-1].name));
+	strncpy(employees[dbhdr->count-1].address, addr, sizeof(employees[dbhdr->count-1].address));
+	
 	employees[dbhdr->count-1].hours = atoi(hours);
 
 	dbhdr->count++;
