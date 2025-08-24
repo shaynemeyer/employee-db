@@ -116,7 +116,7 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
 		return STATUS_ERROR;
 	}
 
-	if (employees == NULL) {
+	if (dbhdr == NULL || employees == NULL) {
 		printf("ERROR: Missing required parameters.\n");
     return STATUS_ERROR;
 	}
@@ -197,14 +197,9 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 
 int create_db_header(struct dbheader_t **headerOut) {
 
-	if (headerOut == NULL) {
-		printf("Database header is null\n");
-    return STATUS_ERROR;
-	}
-
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 
-  if (header == NULL) {
+  if (header == (void*)-1) {
     printf("Malloc failed to create db header\n");
     return STATUS_ERROR;
   }
