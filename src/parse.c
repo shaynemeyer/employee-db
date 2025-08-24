@@ -143,6 +143,9 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring) {
 	if (dbhdr == NULL || employees == NULL || addstring == NULL) {
 		printf("ERROR: Invalid arguments supplied.\n");
+		free(dbhdr);
+		free(employees);
+		free(addstring);
 		return STATUS_ERROR;
 	}
 	
