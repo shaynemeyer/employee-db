@@ -10,17 +10,13 @@
 #include "common.h"
 #include "parse.h"
 
-int create_db_header(int fd, struct dbheader_t **headerOut) {
+int create_db_header(struct dbheader_t **headerOut) {
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 	if (header == (void*)-1) {
 		printf("Malloc failed to create db header\n");
 		return STATUS_ERROR;
 	}
 
-	if (fd < 0) {
-		printf("Got a bad FD from the user\n");
-		return STATUS_ERROR;
-	}
 
 	header->version = 0x1;
 	header->count = 0;
