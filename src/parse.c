@@ -13,10 +13,12 @@
 void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
 	if (dbhdr == NULL || employees == NULL) {
 		printf("ERROR: Required parameters not supplied.");
+		return;
 	}
 	
 	if (dbhdr->count <= 0) {
 		printf("SORRY: No employees to list");
+		return;
 	}
 	int i = 0;
 	for(;i < dbhdr->count; i++) {
@@ -74,11 +76,6 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
   // }
 
 	int count = dbhdr->count;
-
-	if (count <= 0) {
-		printf("No count");
-		return STATUS_ERROR;
-	}
 
 	struct employee_t *employees = calloc(count, sizeof(struct employee_t));
 	if (employees == NULL) {
