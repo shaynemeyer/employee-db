@@ -63,22 +63,22 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 		return STATUS_ERROR;
 	}
 
-	if (employeesOut == NULL) {
-		printf("employeesOut is null\n");
-    return STATUS_ERROR;
-	}
-
 	if (dbhdr == NULL || employeesOut == NULL) {
 		printf("Error: Invalid input parameters.\n");
 		return STATUS_ERROR; // Handle NULL pointers
 	}
 
-	if (dbhdr->count < 0) {
-		printf("Error: Invalid employee count (%d).\n", dbhdr->count);
-		return STATUS_ERROR; // Handle the error appropriately
-  }
+	// if (dbhdr->count <= 0) {
+	// 	printf("Error: Invalid employee count (%d).\n", dbhdr->count);
+	// 	return STATUS_ERROR; // Handle the error appropriately
+  // }
 
 	int count = dbhdr->count;
+
+	if (count < 0) {
+		printf("No count");
+		return STATUS_ERROR;
+	}
 
 	struct employee_t *employees = calloc(count, sizeof(struct employee_t));
 	if (employees == NULL) {
