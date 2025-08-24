@@ -148,6 +148,8 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 		return STATUS_ERROR;
 	}
 
+	int count = dbhdr->count;
+
 	// Tokenize the input string
 	char *name = strtok(addstring, ",");
 	char *addr = strtok(NULL, ",");
@@ -160,17 +162,17 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	}
 	printf("%s %s %s\n", name, addr, hours);
 
-	printf("Count: %d\n", dbhdr->count);
+	printf("Count: %d\n", count);
 
-	if (dbhdr->count >= MAX_EMPLOYEES) { // Assuming MAX_EMPLOYEES is defined
+	if (count >= MAX_EMPLOYEES) { // Assuming MAX_EMPLOYEES is defined
 		printf("Error: Employee list is full.\n");
 		return STATUS_ERROR; // Prevent out-of-bounds access
 	}
 
-	int cursor_position = dbhdr->count -1;
+	int cursor_position = count -1;
 
-	strncpy(employees[cursor_position].name, name, sizeof(employees[cursor_position].name));
-	strncpy(employees[cursor_position].address, addr, sizeof(employees[cursor_position].address));
+	strncpy(employees[cursor_position].name, name, sizeof(employees[cursor_position].name)-1);
+	strncpy(employees[cursor_position].address, addr, sizeof(employees[cursor_position].address)-1);
 
 	employees[cursor_position].name[sizeof(employees[cursor_position].name) - 1] = '\0';
 	employees[cursor_position].address[sizeof(employees[cursor_position].address) - 1] = '\0';
