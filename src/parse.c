@@ -38,10 +38,7 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	}
 	printf("%s %s %s\n", name, addr, hours);
 
-	if (dbhdr->count <=0) {
-		printf("Error: Invalid employee count.\n");
-		return STATUS_ERROR; // Handle invalid count
-	}
+	printf("Count: %d\n", dbhdr->count);
 
 	strncpy(employees[dbhdr->count - 1].name, name, sizeof(employees[dbhdr->count - 1].name) -1);
 	employees[dbhdr->count - 1].name[sizeof(employees[dbhdr->count - 1].name) - 1] = '\0'; // Null-terminate
