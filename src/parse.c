@@ -170,25 +170,21 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	printf("Count: %d\n", count);
 
-	if (count >= MAX_EMPLOYEES) { // Assuming MAX_EMPLOYEES is defined
-		printf("Error: Employee list is full.\n");
-		return STATUS_ERROR; // Prevent out-of-bounds access
-	}
-
 	int cursor_position = count -1;
 
-	// strncpy(employees[cursor_position].name, name, sizeof(employees[cursor_position].name)-1);
-	// strncpy(employees[cursor_position].address, addr, sizeof(employees[cursor_position].address)-1);
-
-	// employees[cursor_position].name[sizeof(employees[cursor_position].name) - 1] = '\0';
-	// employees[cursor_position].address[sizeof(employees[cursor_position].address) - 1] = '\0';
-
-		// Safely copy name and address
+	// Safely copy name and address
 	snprintf(employees[dbhdr->count].name, sizeof(employees[dbhdr->count].name), "%s", name);
 	snprintf(employees[dbhdr->count].address, sizeof(employees[dbhdr->count].address), "%s", addr);
 
+	// employees[cursor_position].hours = atoi(hours);
 
-	employees[cursor_position].hours = atoi(hours);
+	// Convert hours with error checking
+	char *endptr;
+	employees[dbhdr->count].hours = strtol(hours, &endptr, 10);
+	if (*endptr != '\0') {
+			printf("Error: Invalid hours format.\n");
+			return STATUS_ERROR; // Handle invalid hours
+	}
 
 	dbhdr->count++;
 	
