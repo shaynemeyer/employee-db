@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
       return STATUS_ERROR;
     }
     
-    add_employee(dbhdr, employees, addstring);
+    add_employee(dbhdr, &employees, addstring);
   }
 
   // if (list) {
