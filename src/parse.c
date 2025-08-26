@@ -148,6 +148,12 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 		return STATUS_ERROR;
 	}
 
+	// Check if there is space for a new employee
+	if (dbhdr->count >= MAX_EMPLOYEES) {
+			printf("Error: Employee database is full.\n");
+			return STATUS_ERROR; // Handle full database
+	}
+
 	int count = dbhdr->count;
 
 	// Tokenize the input string
@@ -171,11 +177,15 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 
 	int cursor_position = count -1;
 
-	strncpy(employees[cursor_position].name, name, sizeof(employees[cursor_position].name)-1);
-	strncpy(employees[cursor_position].address, addr, sizeof(employees[cursor_position].address)-1);
+	// strncpy(employees[cursor_position].name, name, sizeof(employees[cursor_position].name)-1);
+	// strncpy(employees[cursor_position].address, addr, sizeof(employees[cursor_position].address)-1);
 
-	employees[cursor_position].name[sizeof(employees[cursor_position].name) - 1] = '\0';
-	employees[cursor_position].address[sizeof(employees[cursor_position].address) - 1] = '\0';
+	// employees[cursor_position].name[sizeof(employees[cursor_position].name) - 1] = '\0';
+	// employees[cursor_position].address[sizeof(employees[cursor_position].address) - 1] = '\0';
+
+		// Safely copy name and address
+	snprintf(employees[dbhdr->count].name, sizeof(employees[dbhdr->count].name), "%s", name);
+	snprintf(employees[dbhdr->count].address, sizeof(employees[dbhdr->count].address), "%s", addr);
 
 
 	employees[cursor_position].hours = atoi(hours);
