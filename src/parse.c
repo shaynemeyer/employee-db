@@ -142,51 +142,13 @@ int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employe
 
 }
 
-int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees, char *addstring) {
-	if (dbhdr == NULL || employees == NULL || addstring == NULL || addstring[0] == '\0') {
-		printf("ERROR: Invalid arguments supplied.\n");
-		return STATUS_ERROR;
-	}
-
-	// Check if there is space for a new employee
-	if (dbhdr->count >= MAX_EMPLOYEES) {
-			printf("Error: Employee database is full.\n");
-			return STATUS_ERROR; // Handle full database
-	}
-
-	int count = dbhdr->count;
-
-	// Tokenize the input string
-	char *name = strtok(addstring, ",");
-	char *addr = strtok(NULL, ",");
-	char *hours = strtok(NULL, ",");
-
-	// Check if all tokens are present
-	if (name == NULL || addr == NULL || hours == NULL) {
-			printf("Error: Missing fields in input string.\n");
-			return STATUS_ERROR; // Handle missing fields
-	}
-	printf("%s %s %s\n", name, addr, hours);
-
-	printf("Count: %d\n", count);
-
-	int cursor_position = count - 1;
-
-	// Safely copy name and address
-	snprintf(employees[cursor_position]->name, sizeof(employees[cursor_position]->name), "%s", name);
-	snprintf(employees[cursor_position]->address, sizeof(employees[cursor_position]->address), "%s", addr);
-
-	// employees[cursor_position].hours = atoi(hours);
-
-	// Convert hours with error checking
-	char *endptr;
-	employees[cursor_position]->hours = strtol(hours, &endptr, 10);
-	if (*endptr != '\0') {
-			printf("Error: Invalid hours format.\n");
-			return STATUS_ERROR; // Handle invalid hours
-	}
-
-	dbhdr->count++;
-	
-	return STATUS_SUCCESS;
+int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring) {
+  char *name = strtok(addstring,",");
+  char *addr = strtok(NULL,",");
+  char *hours = strtok(NULL,",");
+  printf("%s %s %s\n",name,addr,hours);
+  strncpy(employees[dbhdr->count-1].name,name,sizeof(employees[dbhdr->count-1].name));
+  strncpy(employees[dbhdr->count-1].address,addr,sizeof(employees[dbhdr->count-1].address));
+  employees[dbhdr->count-1].hours = atoi(hours); 
+  return STATUS_SUCCESS;
 }
